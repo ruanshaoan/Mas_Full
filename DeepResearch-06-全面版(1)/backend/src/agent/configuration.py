@@ -5,8 +5,8 @@ from typing import Any, Optional, List
 from langchain_core.runnables import RunnableConfig
 
 # 模型ID常量
-MODEL_ID_FLASH = "deepseek-v4-flash"
-MODEL_ID_PLUS = "deepseek-v4-flash"
+MODEL_ID_FLASH = "deepseek-flash"
+MODEL_ID_PLUS = "deepseek-flash"
 MODEL_ID_MAX = "deepseek-v4-pro"
 MODEL_ID_JUDEG = "deepseek-v4-pro"
 

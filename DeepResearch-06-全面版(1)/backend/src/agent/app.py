@@ -128,7 +128,7 @@ async def submit_research(request: Request):
         "messages": [{"type": "human", "content": "分析AI芯片市场趋势"}],
         "initial_search_query_count": 3,
         "max_research_loops": 3,
-        "reasoning_model": "qwen-plus-latest"
+        "reasoning_model": "deepseek-v4-pro"
     }
     """
     user_id: int = getattr(request.state, "user_id", 0)

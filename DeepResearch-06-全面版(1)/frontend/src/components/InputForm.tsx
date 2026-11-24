@@ -27,7 +27,7 @@ export const InputForm = forwardRef<any, InputFormProps>(({
 }, ref) => {
   const [internalInputValue, setInternalInputValue] = useState("");
   const [effort, setEffort] = useState("low");
-  const [model, setModel] = useState("qwen-turbo-latest");
+  const [model, setModel] = useState("deepseek-v4-pro");
   const [availableModels, setAvailableModels] = useState<ModelConfig[]>([]);
 
   // 加载可用模型列表
@@ -35,7 +35,7 @@ export const InputForm = forwardRef<any, InputFormProps>(({
     fetchAvailableModels().then((models) => {
       setAvailableModels(models);
       // 设置默认选中第一个模型
-      if (models.length > 0 && model === "qwen-turbo-latest") {
+      if (models.length > 0 && model === "deepseek-v4-pro") {
         setModel(models[0].model_id);
       }
     });

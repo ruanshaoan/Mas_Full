@@ -26,9 +26,8 @@ export async function fetchAvailableModels(): Promise<ModelConfig[]> {
     console.error("获取模型列表失败:", error);
     // 返回默认模型列表作为降级方案
     return [
-      { model_id: "qwen3.6-flash", display_name: "Qwen-Flash", icon: "Zap", icon_color: "yellow-400" },
-      { model_id: "qwen3.6-plus", display_name: "Qwen-Plus", icon: "Zap", icon_color: "orange-400" },
-      { model_id: "qwen3.7-max", display_name: "Qwen-Max", icon: "Cpu", icon_color: "purple-400" },
+      { model_id: "deepseek-v4-pro", display_name: "DeepSeek-V4-Pro", icon: "Cpu", icon_color: "purple-400" },
+      { model_id: "deepseek-flash", display_name: "DeepSeek-Flash", icon: "Zap", icon_color: "orange-400" },
     ];
   }
 }

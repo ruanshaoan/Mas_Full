@@ -20,7 +20,7 @@ export default function App() {
   const hasFinalizeEventOccurredRef = useRef(false);
   const [error, setError] = useState<string | null>(null);
   const [savedEffort, setSavedEffort] = useState("medium");
-  const [savedModel, setSavedModel] = useState("qwen-plus-latest");
+  const [savedModel, setSavedModel] = useState("deepseek-v4-pro");
   const thread = useStream<{
     messages: Message[];
     initial_search_query_count: number;

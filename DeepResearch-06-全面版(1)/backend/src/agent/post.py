@@ -9,7 +9,8 @@ class Post:
         regex = re.compile(r"```\s*" + re.escape(pattern) + r"\s(.*?)```", re.DOTALL)
         matches = regex.findall(text)
         if matches:
-            return matches[0]
+            content = matches[0]
+            return _repair_json(content) if "json" in pattern else content
 
         # Fallback: if no code-fence match, try to extract valid JSON
         if "json" in pattern:
@@ -23,6 +24,25 @@ def _clean_json(text: str) -> str:
     # Remove trailing commas before } or ]
     text = re.sub(r",\s*([}\]])", r"\1", text)
     return text
+
+
+def _fix_invalid_escapes(text: str) -> str:
+    """将 JSON 中非法的转义序列修复为字面反斜杠。
+
+    LLM 常输出含反斜杠的内容（Windows 路径、正则、LaTeX 等），直接
+    json.loads 会报 "Invalid \\escape"。合法 JSON 转义仅包含：
+    \\" \\\\ \\/ \\b \\f \\n \\r \\t \\uXXXX。
+    """
+    # \u 后面必须是 4 位十六进制，否则转义为字面 \u
+    text = re.sub(r"\\u(?![\da-fA-F]{4})", lambda m: "\\\\u", text)
+    # 其他非法转义：\ 后面不是合法转义字符
+    text = re.sub(r'\\(?!["\\/bfnrtu])', lambda m: "\\\\", text)
+    return text
+
+
+def _repair_json(text: str) -> str:
+    """清理尾逗号并修复非法转义，得到尽量可被 json.loads 解析的文本。"""
+    return _fix_invalid_escapes(_clean_json(text))
 
 
 def _extract_json(text: str) -> str:
@@ -52,7 +72,7 @@ def _extract_json(text: str) -> str:
 
     # Try each candidate — keep longest valid JSON (after cleaning)
     for start, end in candidates:
-        candidate = _clean_json(text[start:end])
+        candidate = _repair_json(text[start:end])
         try:
             json.loads(candidate)
             if len(candidate) > len(best):
@@ -66,7 +86,7 @@ def _extract_json(text: str) -> str:
     # Strategy 2: wrap the longest bracket-balanced candidate in {{...}}
     if candidates:
         longest = max(candidates, key=lambda p: p[1] - p[0])
-        wrapped = _clean_json("{" + text[longest[0]:longest[1]] + "}")
+        wrapped = _repair_json("{" + text[longest[0]:longest[1]] + "}")
         try:
             json.loads(wrapped)
             return wrapped

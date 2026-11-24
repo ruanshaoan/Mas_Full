@@ -166,7 +166,7 @@ def _retry_with_classified_errors(
 
 class Agent:
     step_prompt = """{prompt}"""
-    def __init__(self, model_id="deepseek-v4-flash"):
+    def __init__(self, model_id="deepseek-flash"):
         self.llm = OpenAICompatibleLLM(model_id=model_id)
 
     def __call__(self, prompt):
@@ -306,7 +306,7 @@ class Agent:
 
 
 class JsonAgent(Agent):
-    def __init__(self, model_id="deepseek-v4-flash", keys=None):
+    def __init__(self, model_id="deepseek-flash", keys=None):
         super().__init__(model_id)
         self.keys = keys
 
